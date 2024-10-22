@@ -1,7 +1,6 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
-import type { Metadata } from "next";
 
 const PlantProfiler = () => {
   const [plantType, setPlantType] = useState("");

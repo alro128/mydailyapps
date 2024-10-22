@@ -62,7 +62,7 @@ const products = [
 
 export default function Home() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [viewType, setViewType] = useState("card");
+  const [viewType] = useState("card");
   const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
 
   const handleTopicClick = (topic: string) => {
@@ -116,11 +116,7 @@ export default function Home() {
       </div>
 
       {/* Product Display */}
-      <div
-        className={`mt-8 grid ${
-          viewType === "card" ? "grid-cols-1 md:grid-cols-3 gap-6" : ""
-        }`}
-      >
+      <div className={`mt-8 grid grid-cols-1 md:grid-cols-3 gap-6`}>
         {filteredProducts.map((product) => (
           <AppCard
             key={product.id}
