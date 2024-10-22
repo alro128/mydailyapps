@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Head from "next/head";
 
 const WordCounter = () => {
@@ -7,7 +7,7 @@ const WordCounter = () => {
   const [wordCount, setWordCount] = useState(0);
   const [charCount, setCharCount] = useState(0);
 
-  useState(() => {
+  useEffect(() => {
     calculateMetrics();
   });
 
