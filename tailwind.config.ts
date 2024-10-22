@@ -14,6 +14,16 @@ const config: Config = {
       },
     },
   },
-  plugins: [],
+  plugins: [require("daisyui")],
+  daisyui: {
+    themes: [
+      {
+        fantasy: {
+          ...require("daisyui/src/theming/themes")["fantasy"],
+          primary: "221551",
+        },
+      },
+    ],
+  },
 };
 export default config;

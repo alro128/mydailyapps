@@ -1,101 +1,139 @@
-import Image from "next/image";
+"use client";
+import { useState } from "react";
+import AppCard from "./components/AppCard";
+
+const products = [
+  {
+    id: 1,
+    name: "Latecomer",
+    description:
+      "Because your time is value, Latecomer is an app to promote punctuality, when you meet with friends and family, calculate the share bill based on arrival time. Late attendees should pay more and on time attendees should get rewarded.",
+    topic: "social",
+    path: "/latecomer",
+    thumbnail: "/latecomer-thumbnail.webp",
+  },
+  {
+    id: 2,
+    name: "Metronome with Chord Progression",
+    description:
+      "Showing the chord progression within the metronome helps music learners follow the beats while guiding which chords to play, making it ideal for improvisation and practice.",
+    topic: "music",
+    path: "/chordmetronome",
+    thumbnail: "/metronome-thumbnail.webp",
+  },
+  {
+    id: 3,
+    name: "Plant Profiler",
+    description:
+      "Optimize your gardening practices and ensure your plants thrive in the right conditions by getting customized care recommendations for various plant types.",
+    topic: "gardening",
+    path: "/plantprofiler",
+    thumbnail: "/plantprofiler-thumbnail.webp",
+  },
+  {
+    id: 4,
+    name: "Plant Pot Volume Calculator",
+    description:
+      "Easily calculate the ideal pot volume for your plants based on pot shape and dimensions to ensure optimal growth and health.",
+    topic: "gardening",
+    path: "/plantpotvolume",
+    thumbnail: "/plantpotvolume-thumbnail.webp",
+  },
+  {
+    id: 5,
+    name: "Word Counter",
+    description:
+      "Quickly count words and characters, and get estimated reading and speaking times for any text.",
+    topic: "school",
+    path: "/wordcounter",
+    thumbnail: "/wordcounter-thumbnail.webp",
+  },
+  {
+    id: 6,
+    name: "Free Templates",
+    description:
+      "Explore our collection of free, downloadable MS Excel templates designed for various needs, including budgeting, planning, and organizing. Our templates are user-friendly and fully compatible with Excel, helping you manage personal and professional tasks efficiently. Best of all, your privacy is guaranteed, as no personal data is collected or stored.",
+    topic: "free templates",
+    path: "/freetemplates",
+    thumbnail: "/freetemplates-thumbnail.webp",
+  },
+  // Add more products as needed
+];
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [searchTerm, setSearchTerm] = useState("");
+  const [viewType, setViewType] = useState("card");
+  const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  const handleTopicClick = (topic: string) => {
+    setSelectedTopic(topic === selectedTopic ? null : topic);
+  };
+
+  const filteredProducts = products.filter(
+    (product) =>
+      product.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      (selectedTopic
+        ? product.topic.toLowerCase() === selectedTopic.toLowerCase()
+        : true)
+  );
+
+  return (
+    <div className="container mx-auto p-4">
+      {/* Search Bar */}
+      <div className="flex items-center text-base">
+        <strong className="mr-2">Search:</strong>
+        <input
+          type="text"
+          placeholder="Search Apps and Articles..."
+          className="input input-bordered w-auto max-w-s"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        {/* Filter Buttons */}
+        <div className="flex justify-center space-x-4">
+          <strong className="ml-4">Topics:</strong>
+          {[
+            "Free Templates",
+            "Music",
+            "Gardening",
+            "Technology",
+            "Social",
+            "School",
+          ].map((topic) => (
+            <button
+              key={topic}
+              className={`btn btn-sm btn-outline ${
+                selectedTopic === topic
+                  ? "text-white bg-secondary border-gray-200"
+                  : ""
+              }`}
+              onClick={() => handleTopicClick(topic)}
+            >
+              {topic}
+            </button>
+          ))}
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+      </div>
+
+      {/* Product Display */}
+      <div
+        className={`mt-8 grid ${
+          viewType === "card" ? "grid-cols-1 md:grid-cols-3 gap-6" : ""
+        }`}
+      >
+        {filteredProducts.map((product) => (
+          <AppCard
+            key={product.id}
+            id={product.id}
+            name={product.name}
+            description={product.description}
+            topic={product.topic}
+            path={product.path}
+            thumbnail={product.thumbnail}
+            viewType={viewType}
           />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        ))}
+      </div>
     </div>
   );
 }
