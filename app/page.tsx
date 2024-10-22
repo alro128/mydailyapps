@@ -62,7 +62,6 @@ const products = [
 
 export default function Home() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [viewType] = useState("card");
   const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
 
   const handleTopicClick = (topic: string) => {
