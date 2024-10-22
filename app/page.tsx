@@ -130,7 +130,6 @@ export default function Home() {
             topic={product.topic}
             path={product.path}
             thumbnail={product.thumbnail}
-            viewType={viewType}
           />
         ))}
       </div>

@@ -1,5 +1,4 @@
 import React from "react";
-import { FaDownload } from "react-icons/fa";
 
 const FreeTemplates: React.FC = () => {
   // Sample Data for Excel Templates
@@ -43,14 +42,14 @@ const FreeTemplates: React.FC = () => {
         <p className="text-justify text-base mb-6">
           In this web, we provide useful functionality and tools for users in an
           open-source and completely free way. We prioritize your privacy and
-          don't collect any personal information. Because of this, calculators
-          or planners that require personal data input, such as financial
-          planning or inventory tracking, are made available as downloadable,
-          free MS Excel-compatible templates. This allows you to use our tools
-          locally, ensuring your sensitive data remains secure on your own
-          device. Enjoy a variety of templates, from mortgage calculators and
-          travel packing checklists to apartment inventory and retirement
-          planners—all tailored to make your life easier!
+          don&apos;t collect any personal information. Because of this,
+          calculators or planners that require personal data input, such as
+          financial planning or inventory tracking, are made available as
+          downloadable, free MS Excel-compatible templates. This allows you to
+          use our tools locally, ensuring your sensitive data remains secure on
+          your own device. Enjoy a variety of templates, from mortgage
+          calculators and travel packing checklists to apartment inventory and
+          retirement planners—all tailored to make your life easier!
         </p>
         <div className="overflow-x-auto">
           <table className="table table-zebra w-full">

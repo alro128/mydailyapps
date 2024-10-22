@@ -60,7 +60,7 @@ const LatecomerPage: React.FC = () => {
     if (!billAmount || !meetingTime || attendees.length === 0) return;
 
     const bill = parseFloat(billAmount);
-    let latecomers: { name: string; lateMinutes: number }[] = [];
+    const latecomers: { name: string; lateMinutes: number }[] = [];
 
     attendees.forEach((attendee) => {
       const lateMinutes = Math.max(

@@ -7,9 +7,9 @@ const WordCounter = () => {
   const [wordCount, setWordCount] = useState(0);
   const [charCount, setCharCount] = useState(0);
 
-  useEffect(() => {
+  useState(() => {
     calculateMetrics();
-  }, [text]);
+  });
 
   const calculateMetrics = () => {
     // Remove special characters and split by spaces to count words

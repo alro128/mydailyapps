@@ -1,6 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import type { Metadata } from "next";
 
 const PlantPotVolume = () => {
   const [shape, setShape] = useState("");

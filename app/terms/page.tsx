@@ -37,8 +37,8 @@ export default function Terms() {
         </h2>
         <p className="mb-4">
           We are not responsible for any damages or data loss resulting from the
-          use of our applications. All tools and services are provided "as is"
-          without any warranties.
+          use of our applications. All tools and services are provided &quot;as
+          is&quot; without any warranties.
         </p>
         <h2 className="text-2xl font-semibold mb-4">4. Changes to Terms</h2>
         <p className="mb-4">

@@ -8,7 +8,6 @@ type AppCardProps = {
   topic: string;
   path: string;
   thumbnail: string;
-  viewType: string;
 };
 
 const AppCard: React.FC<AppCardProps> = ({
@@ -17,7 +16,6 @@ const AppCard: React.FC<AppCardProps> = ({
   topic,
   path,
   thumbnail,
-  viewType,
 }) => {
   return (
     <div className="card glass w-120 shadow-xl">
