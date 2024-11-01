@@ -159,7 +159,7 @@ const LatecomerPage: React.FC = () => {
   };
 
   return (
-    <div className="p-4 rounded-lg shadow-lg w-full max-w-3xl mx-auto bg-slate-50 text-base items-center">
+    <div className="p-4 rounded-lg shadow-lg max-w-3xl mx-auto bg-slate-50 text-base items-center">
       <h1 className="text-4xl font-bold text-center mb-4">
         Latecomer Bill Calculator
       </h1>
@@ -170,57 +170,56 @@ const LatecomerPage: React.FC = () => {
         on arrival time. Late attendees should pay more and on time attendees
         should get rewarded.
       </p>
-      {/* Tabs Navigation Bottom Style */}
-      <div className="w-full flex left-0 items-center justify-center bg-base-100 border-b border-gray-200">
-        <div className="flex justify-around">
-          <button
-            className={`btn btn-ghost rounded-none flex flex-col items-center justify-center border-l border-r border-gray-200 ${
-              activeTab === "MeetingTime"
-                ? "text-secondary bg-gray-200"
-                : "text-primary"
-            }`}
-            onClick={() => setActiveTab("MeetingTime")}
-          >
-            <FaClock
-              className='text-xl mb-1 ${
+      {/* Tabs */}
+      <div role="tablist" className="tabs tabs-lifted md:tabs-lg">
+        <a
+          role="tab"
+          className={`tab ${
+            activeTab === "MeetingTime"
+              ? "tab-active text-secondary [--tab-bg:#e5e7eb]"
+              : "text-primary"
+          }`}
+          onClick={() => setActiveTab("MeetingTime")}
+        >
+          <FaClock
+            className={`text-xl mb-1 mr-1 ${
               activeTab === "MeetingTime" ? "text-secondary" : "text-primary"
-            }`}'
-            />
-            <span className="text-base">Meeting Time</span>
-          </button>
-
-          <button
-            className={`btn btn-ghost rounded-none flex flex-col items-center justify-center border-l border-r border-gray-200 ${
-              activeTab === "Attendees"
-                ? "text-secondary bg-gray-200"
-                : "text-primary"
             }`}
-            onClick={() => setActiveTab("Attendees")}
-          >
-            <FaUser
-              className='text-xl mb-1 ${
+          />{" "}
+          Meeting Time
+        </a>
+        <a
+          role="tab"
+          className={`tab ${
+            activeTab === "Attendees"
+              ? "tab-active text-secondary [--tab-bg:#e5e7eb]"
+              : "text-primary"
+          }`}
+          onClick={() => setActiveTab("Attendees")}
+        >
+          <FaUser
+            className={`text-xl mb-1 mr-1 ${
               activeTab === "Attendees" ? "text-secondary" : "text-primary"
-            }`}'
-            />
-            <span className="text-base">Attendees</span>
-          </button>
-
-          <button
-            className={`btn btn-ghost rounded-none flex flex-col items-center justify-center border-l border-r border-gray-200 ${
-              activeTab === "Bill"
-                ? "text-secondary bg-gray-200"
-                : "text-primary"
             }`}
-            onClick={() => setActiveTab("Bill")}
-          >
-            <FaDollarSign
-              className='text-xl mb-1 ${
+          />{" "}
+          Attendees
+        </a>
+        <a
+          role="tab"
+          className={`tab ${
+            activeTab === "Bill"
+              ? "tab-active text-secondary [--tab-bg:#e5e7eb]"
+              : "text-primary"
+          }`}
+          onClick={() => setActiveTab("Bill")}
+        >
+          <FaDollarSign
+            className={`text-xl mb-1 mr-1 ${
               activeTab === "Bill" ? "text-secondary" : "text-primary"
-            }`}'
-            />
-            <span className="text-base">Bill</span>
-          </button>
-        </div>
+            }`}
+          />{" "}
+          Bill
+        </a>
       </div>
 
       {/* Meeting Time Tab */}
@@ -266,16 +265,16 @@ const LatecomerPage: React.FC = () => {
       {activeTab === "Attendees" && (
         <div className="mt-4 flex flex-col items-center">
           <p className="mb-4">Track attendees and their arrival time.</p>
-          <div className="flex items-center space-x-4">
+          <div className="flex flex-wrap items-center justify-center space-x-1 md:space-x-4">
             <input
               type="text"
               placeholder="Attendee Name"
-              className="input input-bordered"
+              className="input input-bordered w-2/6 md:w-1/4"
               value={newAttendee}
               onChange={(e) => setNewAttendee(e.target.value)}
             />
             <select
-              className="select select-bordered text-base"
+              className="select select-bordered text-base w-2/6 md:w-1/4"
               onChange={(e) => setNewAttendeetime(parseDate(e.target.value))}
               defaultValue={formatDate(newAttendeeTime)}
             >
@@ -292,11 +291,12 @@ const LatecomerPage: React.FC = () => {
               ))}
             </select>
             <button
-              className="btn btn-success text-white text-base"
+              className="btn btn-success text-white text-base w-1/6 md:w-1/4"
               onClick={addAttendee}
               disabled={!newAttendee.trim()}
             >
-              <FaPlus className="mr-2" /> Add
+              <FaPlus className="mr-2 hidden lg:block" />
+              Add
             </button>
           </div>
           <div className="mt-4">
@@ -337,18 +337,18 @@ const LatecomerPage: React.FC = () => {
             Enter the initial bill amount and the latecomer penalization limit,
             then Calculate Latecomer Shared Bill:
           </p>
-          <div className="flex items-center space-x-4">
+          <div className="flex flex-wrap items-center justify-center space-y-1 space-x-1 md:space-x-4 md:space-x-2">
             <input
               type="text"
               placeholder="Bill Amount"
-              className="input input-bordered"
+              className="input input-bordered w-2/6 md:w-1/4"
               value={billAmount}
               onChange={(e) =>
                 setBillAmount(e.target.value.replace(/[^0-9.]/g, ""))
               }
             />
             <select
-              className="select select-bordered"
+              className="select select-bordered text-base w-2/6 md:w-1/4"
               value={penalizationLimit}
               onChange={(e) => setPenalizationLimit(e.target.value)}
             >
@@ -360,11 +360,11 @@ const LatecomerPage: React.FC = () => {
               <option>Up to 100%</option>
             </select>
             <button
-              className="btn btn-primary text-white text-base"
+              className="btn btn-primary text-white text-base w-2/6 md:w-1/4"
               onClick={calculateLatecomerBill}
               disabled={!billAmount}
             >
-              Calculate Latecomer Bill
+              Calculate
             </button>
           </div>
 

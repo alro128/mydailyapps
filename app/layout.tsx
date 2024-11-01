@@ -34,7 +34,6 @@ export default function RootLayout({
         sizes="48x48"
       />
       <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-      <link rel="shortcut icon" href="/favicon.ico" />
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

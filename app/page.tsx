@@ -79,38 +79,33 @@ export default function Home() {
   return (
     <div className="container mx-auto p-4">
       {/* Search Bar */}
-      <div className="flex items-center text-base">
+      <div className="flex flex-wrap items-center justify-start text-base">
         <strong className="mr-2">Search:</strong>
         <input
           type="text"
-          placeholder="Search Apps and Articles..."
+          placeholder="Search Apps..."
           className="input input-bordered w-auto max-w-s"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
         {/* Filter Buttons */}
-        <div className="flex justify-center space-x-4">
+        <div className="flex flex-wrap justify-start items-center space-x-4 space-y-2">
           <strong className="ml-4">Topics:</strong>
-          {[
-            "Free Templates",
-            "Music",
-            "Gardening",
-            "Technology",
-            "Social",
-            "School",
-          ].map((topic) => (
-            <button
-              key={topic}
-              className={`btn btn-sm btn-outline ${
-                selectedTopic === topic
-                  ? "text-white bg-secondary border-gray-200"
-                  : ""
-              }`}
-              onClick={() => handleTopicClick(topic)}
-            >
-              {topic}
-            </button>
-          ))}
+          {["Free Templates", "Music", "Gardening", "Social", "School"].map(
+            (topic) => (
+              <button
+                key={topic}
+                className={`btn btn-sm btn-outline ${
+                  selectedTopic === topic
+                    ? "text-white bg-secondary border-gray-200"
+                    : ""
+                }`}
+                onClick={() => handleTopicClick(topic)}
+              >
+                {topic}
+              </button>
+            )
+          )}
         </div>
       </div>
 
