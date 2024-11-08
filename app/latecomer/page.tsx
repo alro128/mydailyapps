@@ -15,17 +15,14 @@ import {
 const LatecomerPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState("MeetingTime");
   const [meetingTime, setMeetingTime] = useState<Date | null>(new Date());
-  const [attendees, setAttendees] = useState<{ name: string; arrival: Date }[]>(
-    []
-  );
+  const [attendees, setAttendees] = useState<Attendee[]>([]);
   const [newAttendee, setNewAttendee] = useState("");
   const [newAttendeeTime, setNewAttendeetime] = useState(meetingTime);
   const [billAmount, setBillAmount] = useState<string>("");
   const [penalizationLimit, setPenalizationLimit] = useState("Up to 50%");
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [calculatedBill, setCalculatedBill] = useState<
-    { name: string; arrival: string; share: number }[]
-  >([]);
+  const [attendeesBill, setAttendeesBill] = useState<Attendee[]>([]);
+  const [sumBillAmount, setSumBillAmount] = useState<number>(0);
 
   // Helper function to format date
   const formatDate = (date: Date | null) =>
@@ -43,7 +40,14 @@ const LatecomerPage: React.FC = () => {
         : new Date(meetingTime.getTime());
       setAttendees([
         ...attendees,
-        { name: newAttendee.trim(), arrival: arrivalTime },
+        {
+          id: Date.now().toString(),
+          name: newAttendee.trim(),
+          arrivalTime: arrivalTime,
+          onTime: isOnTime(arrivalTime, meetingTime),
+          penaltyPoints: calculatePenalty(arrivalTime, meetingTime),
+          billShare: 0,
+        },
       ]);
       setNewAttendee("");
     }
@@ -55,103 +59,166 @@ const LatecomerPage: React.FC = () => {
     setAttendees(updatedAttendees);
   };
 
-  // Calculate Latecomer Bill Logic
-  const calculateLatecomerBill = () => {
-    if (!billAmount || !meetingTime || attendees.length === 0) return;
+  // Attendee model in TypeScript
+  interface Attendee {
+    id: string;
+    name: string;
+    arrivalTime: Date;
+    onTime: boolean;
+    penaltyPoints: number;
+    billShare: number;
+  }
 
-    const bill = parseFloat(billAmount);
-    const latecomers: { name: string; lateMinutes: number }[] = [];
+  function isOnTime(arrivalTime: Date, meetingTime: Date) {
+    const minutesLate =
+      (arrivalTime.getTime() - meetingTime.getTime()) / (1000 * 60);
 
-    attendees.forEach((attendee) => {
-      const lateMinutes = Math.max(
-        (attendee.arrival.getTime() - meetingTime.getTime()) / 60000,
-        0
-      );
-      if (lateMinutes > 0) {
-        latecomers.push({ name: attendee.name, lateMinutes });
-      }
-    });
+    if (minutesLate <= 0) {
+      return true;
+    }
+
+    return false;
+  }
+
+  // Function to calculate penalty points for an attendee
+  function calculatePenalty(arrivalTime: Date, meetingTime: Date): number {
+    const minutesLate =
+      (arrivalTime.getTime() - meetingTime.getTime()) / (1000 * 60);
 
     let penalty = 0;
-    latecomers.forEach((late) => {
-      let lateCost = 0;
-      if (late.lateMinutes <= 5) lateCost = late.lateMinutes * 0.1;
-      else if (late.lateMinutes <= 10)
-        lateCost = 5 * 0.1 + (late.lateMinutes - 5) * 0.5;
-      else if (late.lateMinutes <= 15)
-        lateCost = 5 * 0.1 + 5 * 0.5 + (late.lateMinutes - 10) * 0.75;
-      else if (late.lateMinutes <= 20)
-        lateCost =
-          5 * 0.1 + 5 * 0.5 + 5 * 0.75 + (late.lateMinutes - 15) * 1.25;
-      else if (late.lateMinutes <= 25)
-        lateCost =
-          5 * 0.1 +
-          5 * 0.5 +
-          5 * 0.75 +
-          5 * 1.25 +
-          (late.lateMinutes - 20) * 1.5;
-      else if (late.lateMinutes <= 30)
-        lateCost =
-          5 * 0.1 +
-          5 * 0.5 +
-          5 * 0.75 +
-          5 * 1.25 +
-          5 * 1.5 +
-          (late.lateMinutes - 25) * 2.75;
-      else if (late.lateMinutes <= 35)
-        lateCost =
-          5 * 0.1 +
-          5 * 0.5 +
-          5 * 0.75 +
-          5 * 1.25 +
-          5 * 1.5 +
-          5 * 2.75 +
-          (late.lateMinutes - 30) * 3.75;
-      else if (late.lateMinutes <= 40)
-        lateCost =
-          5 * 0.1 +
-          5 * 0.5 +
-          5 * 0.75 +
-          5 * 1.25 +
-          5 * 1.5 +
-          5 * 2.75 +
-          5 * 3.75 +
-          (late.lateMinutes - 35) * 4.5;
-      else
-        lateCost =
-          5 * 0.1 +
-          5 * 0.5 +
-          5 * 0.75 +
-          5 * 1.25 +
-          5 * 1.5 +
-          5 * 2.75 +
-          5 * 3.75 +
-          5 * 4.5 +
-          (late.lateMinutes - 40) * 4.83335;
 
-      penalty += lateCost;
+    if (minutesLate >= 1 && minutesLate <= 5) {
+      penalty += minutesLate * 0.1;
+    } else if (minutesLate >= 6 && minutesLate <= 10) {
+      penalty += 5 * 0.1 + (minutesLate - 5) * 0.5;
+    } else if (minutesLate >= 11 && minutesLate <= 15) {
+      penalty += 5 * 0.1 + 5 * 0.5 + (minutesLate - 10) * 0.75;
+    } else if (minutesLate >= 16 && minutesLate <= 20) {
+      penalty += 5 * 0.1 + 5 * 0.5 + 5 * 0.75 + (minutesLate - 15) * 1.25;
+    } else if (minutesLate >= 21 && minutesLate <= 25) {
+      penalty +=
+        5 * 0.1 + 5 * 0.5 + 5 * 0.75 + 5 * 1.25 + (minutesLate - 20) * 1.5;
+    } else if (minutesLate >= 26 && minutesLate <= 30) {
+      penalty +=
+        5 * 0.1 +
+        5 * 0.5 +
+        5 * 0.75 +
+        5 * 1.25 +
+        5 * 1.5 +
+        (minutesLate - 25) * 2.75;
+    } else if (minutesLate >= 31 && minutesLate <= 35) {
+      penalty +=
+        5 * 0.1 +
+        5 * 0.5 +
+        5 * 0.75 +
+        5 * 1.25 +
+        5 * 1.5 +
+        5 * 2.75 +
+        (minutesLate - 30) * 3.75;
+    } else if (minutesLate >= 36 && minutesLate <= 40) {
+      penalty +=
+        5 * 0.1 +
+        5 * 0.5 +
+        5 * 0.75 +
+        5 * 1.25 +
+        5 * 1.5 +
+        5 * 2.75 +
+        5 * 3.75 +
+        (minutesLate - 35) * 4.5;
+    } else if (minutesLate >= 41) {
+      penalty +=
+        5 * 0.1 +
+        5 * 0.5 +
+        5 * 0.75 +
+        5 * 1.25 +
+        5 * 1.5 +
+        5 * 2.75 +
+        5 * 3.75 +
+        5 * 4.5 +
+        (minutesLate - 40) * 4.83335;
+    }
+
+    return penalty;
+  }
+
+  function getPenaltyAmount(
+    sumPenaltyPoints: number,
+    penaltyPoints: number
+  ): number {
+    if (sumPenaltyPoints > penaltyLimit * 100) {
+      return (
+        (Number(billAmount) * penaltyLimit * penaltyPoints) / sumPenaltyPoints
+      );
+    } else {
+      return Number(billAmount) * (penaltyPoints / 100);
+    }
+  }
+
+  // Function to calculate bill shares for attendees
+  const calculateBill = () => {
+    setAttendeesBill([]);
+    setSumBillAmount(0);
+
+    const sumPenaltyPoints = attendees.reduce(
+      (sum, attendee) => sum + attendee.penaltyPoints,
+      0
+    );
+
+    // Check if any attendee is on time
+    const anyOnTime = attendees.some((attendee) => attendee.onTime);
+
+    if (!anyOnTime) {
+      // Find the attendee with the earliest arrival time
+      const earliestAttendee = attendees.reduce((earliest, current) =>
+        current.arrivalTime < earliest.arrivalTime ? current : earliest
+      );
+
+      // Update attendees to set the earliest attendee's onTime to true
+      attendees.map((attendee) =>
+        attendee.id === earliestAttendee.id
+          ? { ...attendee, onTime: true }
+          : attendee
+      );
+    }
+
+    attendees.map((attendee) => {
+      attendee.billShare = 0;
+      return attendee;
     });
 
-    const penaltyLimit =
-      parseInt(penalizationLimit.replace("Up to ", "").replace("%", ""), 10) /
-      100;
-    const latecomerShare = penalty * penaltyLimit;
-    const remainingShare = (bill - latecomerShare) / attendees.length;
+    var totalSumAmount = 0;
+    // var latecomers = 0;
 
-    const finalShares = attendees.map((attendee) => {
-      const lateEntry = latecomers.find((late) => late.name === attendee.name);
-      const share = lateEntry
-        ? remainingShare + latecomerShare / latecomers.length
-        : remainingShare;
-      return {
-        name: attendee.name,
-        arrival: formatDate(attendee.arrival),
-        share: share,
-      };
+    // Calculating share for latecomers
+    var updatedAttendees = attendees.map((attendee) => {
+      if (!attendee.onTime) {
+        attendee.billShare = getPenaltyAmount(
+          sumPenaltyPoints,
+          attendee.penaltyPoints
+        );
+        totalSumAmount += attendee.billShare;
+        // latecomers += 1;
+      }
+      return attendee;
     });
 
-    setCalculatedBill(finalShares);
+    const remainingShare =
+      (Number(billAmount) - totalSumAmount) / attendees.length;
+
+    // Distributing remaining share equally among all attendees
+    updatedAttendees.map((attendee) => {
+      attendee.billShare += remainingShare;
+      totalSumAmount += remainingShare;
+      return attendee;
+    });
+
+    setAttendeesBill(updatedAttendees);
+    setSumBillAmount(totalSumAmount);
   };
+
+  const penaltyLimit =
+    parseInt(penalizationLimit.replace("Up to ", "").replace("%", ""), 10) /
+    100;
 
   // Helper function for printing the bill
   const handlePrint = () => {
@@ -307,14 +374,14 @@ const LatecomerPage: React.FC = () => {
               >
                 <FaClock
                   className={`mr-2 ${
-                    attendee.arrival <= meetingTime!
+                    attendee.arrivalTime <= meetingTime!
                       ? "text-green-500"
                       : "text-red-500"
                   }`}
                 />
                 <span className="flex-1">{attendee.name}</span>
                 <span className="text-gray-500">
-                  Arrived at {formatDate(attendee.arrival)}
+                  Arrived at {formatDate(attendee.arrivalTime)}
                 </span>
                 <button
                   className="btn btn-error btn-sm text-white "
@@ -361,7 +428,7 @@ const LatecomerPage: React.FC = () => {
             </select>
             <button
               className="btn btn-primary text-white text-base w-2/6 md:w-1/4"
-              onClick={calculateLatecomerBill}
+              onClick={calculateBill}
               disabled={!billAmount}
             >
               Calculate
@@ -369,7 +436,7 @@ const LatecomerPage: React.FC = () => {
           </div>
 
           {/* Display Calculated Bill Results */}
-          {calculatedBill.length > 0 && (
+          {attendeesBill.length > 0 && (
             <div className="mt-8 w-full">
               <h3 className="text-lg font-semibold mb-4">
                 Calculated Latecomer Bill
@@ -383,13 +450,22 @@ const LatecomerPage: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {calculatedBill.map((item, index) => (
+                  {attendeesBill.map((item, index) => (
                     <tr key={index}>
                       <td className="text-base">{item.name}</td>
-                      <td className="text-base">{item.arrival}</td>
-                      <td className="text-base">${item.share.toFixed(2)}</td>
+                      <td className="text-base">
+                        {formatDate(item.arrivalTime)}
+                      </td>
+                      <td className="text-base">
+                        ${item.billShare.toFixed(2)}
+                      </td>
                     </tr>
                   ))}
+                  <tr>
+                    <td className="text-base"></td>
+                    <td className="text-base">Total</td>
+                    <td className="text-base">${sumBillAmount.toFixed(2)}</td>
+                  </tr>
                 </tbody>
               </table>
               <button
