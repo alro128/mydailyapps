@@ -189,14 +189,13 @@ const LatecomerPage: React.FC = () => {
     let totalSumAmount = 0;
 
     // Calculating share for latecomers
-    let updatedAttendees = attendees.map((attendee) => {
+    const updatedAttendees = attendees.map((attendee) => {
       if (!attendee.onTime) {
         attendee.billShare = getPenaltyAmount(
           sumPenaltyPoints,
           attendee.penaltyPoints
         );
         totalSumAmount += attendee.billShare;
-        // latecomers += 1;
       }
       return attendee;
     });
@@ -403,7 +402,7 @@ const LatecomerPage: React.FC = () => {
             Enter the initial bill amount and the latecomer penalization limit,
             then Calculate Latecomer Shared Bill:
           </p>
-          <div className="flex flex-wrap items-center justify-center space-y-1 space-x-1 md:space-x-4 md:space-x-2">
+          <div className="flex flex-wrap items-center justify-center space-y-1 space-x-1 md:space-x-4">
             <input
               type="text"
               placeholder="Bill Amount"
