@@ -186,11 +186,10 @@ const LatecomerPage: React.FC = () => {
       return attendee;
     });
 
-    var totalSumAmount = 0;
-    // var latecomers = 0;
+    let totalSumAmount = 0;
 
     // Calculating share for latecomers
-    var updatedAttendees = attendees.map((attendee) => {
+    let updatedAttendees = attendees.map((attendee) => {
       if (!attendee.onTime) {
         attendee.billShare = getPenaltyAmount(
           sumPenaltyPoints,
