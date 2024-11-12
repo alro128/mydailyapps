@@ -1072,7 +1072,6 @@ const FamilyPacking: React.FC = () => {
       const quantity = calculateTotalQuantity(data, familyCounts, days);
 
       if (quantity > 0) {
-        data.size;
         packlist.push({
           size: data.size,
           item: data.item,
