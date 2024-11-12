@@ -11,6 +11,8 @@ import {
   FaPlus,
   FaPrint,
 } from "react-icons/fa";
+import Image from "next/image";
+import lcHeaderPic from "../../public/latecomer-header.webp";
 
 const LatecomerPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState("MeetingTime");
@@ -225,9 +227,9 @@ const LatecomerPage: React.FC = () => {
 
   return (
     <div className="p-4 rounded-lg shadow-lg max-w-3xl mx-auto bg-slate-50 text-base items-center">
-      <h1 className="text-4xl font-bold text-center mb-4">
-        Latecomer Bill Calculator
-      </h1>
+      <div className="flex justify-center items-center bg-[#ccc1f9]">
+        <Image src={lcHeaderPic} alt="Latecomer Bill Calculator" />
+      </div>
       {/* Description */}
       <p className="text-justify text-base mb-6">
         Because your time is value, Latecomer is an app to promote punctuality,

@@ -1,5 +1,17 @@
 "use client";
-import React, { useState } from "react";
+import { useState } from "react";
+import Image from "next/image";
+import weightPic from "../../public/weight-2.webp";
+import luggagePic from "../../public/luggage-2.webp";
+import fpHeaderPic from "../../public/familypacking-header.webp";
+import { FaPrint } from "react-icons/fa";
+
+type PackingListItem = {
+  size: string;
+  item: string;
+  quantity: number;
+  handcarry: string;
+};
 
 type PackingItem = {
   size: string;
@@ -19,7 +31,7 @@ type FamilyCounts = {
 };
 
 // JSON constant for packing items
-const familyItems: PackingItem[] = [
+const PackingData: PackingItem[] = [
   {
     size: "Men",
     category: "Clothing",
@@ -31,7 +43,7 @@ const familyItems: PackingItem[] = [
   {
     size: "Men",
     category: "Clothing",
-    item: "trousers",
+    item: "Trousers",
     dayqty: 0.5,
     weight: 500.0,
     handcarry: "n",
@@ -39,7 +51,7 @@ const familyItems: PackingItem[] = [
   {
     size: "Men",
     category: "Clothing",
-    item: "shorts",
+    item: "Shorts",
     dayqty: 0.5,
     weight: 250.0,
     handcarry: "n",
@@ -47,7 +59,7 @@ const familyItems: PackingItem[] = [
   {
     size: "Men",
     category: "Clothing",
-    item: "underwear",
+    item: "Underwear",
     dayqty: 1.0,
     weight: 50.0,
     handcarry: "n",
@@ -55,7 +67,7 @@ const familyItems: PackingItem[] = [
   {
     size: "Men",
     category: "Clothing",
-    item: "socks",
+    item: "Socks",
     dayqty: 1.0,
     weight: 30.0,
     handcarry: "n",
@@ -63,7 +75,7 @@ const familyItems: PackingItem[] = [
   {
     size: "Men",
     category: "Clothing",
-    item: "jacket",
+    item: "Jacket",
     dayqty: -1.0,
     weight: 700.0,
     handcarry: "n",
@@ -71,7 +83,7 @@ const familyItems: PackingItem[] = [
   {
     size: "Men",
     category: "Clothing",
-    item: "swimwear",
+    item: "Swimwear",
     dayqty: -1.0,
     weight: 100.0,
     handcarry: "n",
@@ -79,7 +91,7 @@ const familyItems: PackingItem[] = [
   {
     size: "Men",
     category: "Clothing",
-    item: "hat",
+    item: "Hat",
     dayqty: -1.0,
     weight: 50.0,
     handcarry: "n",
@@ -111,7 +123,7 @@ const familyItems: PackingItem[] = [
   {
     size: "Men",
     category: "Toiletries",
-    item: "toothpaste",
+    item: "Toothpaste",
     dayqty: -1.0,
     weight: 100.0,
     handcarry: "n",
@@ -119,7 +131,7 @@ const familyItems: PackingItem[] = [
   {
     size: "Men",
     category: "Toiletries",
-    item: "deodorant",
+    item: "Deodorant",
     dayqty: -1.0,
     weight: 75.0,
     handcarry: "n",
@@ -127,7 +139,7 @@ const familyItems: PackingItem[] = [
   {
     size: "Men",
     category: "Toiletries",
-    item: "razor",
+    item: "Razor",
     dayqty: -1.0,
     weight: 25.0,
     handcarry: "n",
@@ -135,9 +147,9 @@ const familyItems: PackingItem[] = [
   {
     size: "Men",
     category: "Toiletries",
-    item: "comb",
+    item: "Comb",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
@@ -145,31 +157,31 @@ const familyItems: PackingItem[] = [
     category: "Tech Devices",
     item: "Phone",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
     size: "Men",
     category: "Tech Devices",
-    item: "charger",
+    item: "Charger",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
     size: "Men",
     category: "Tech Devices",
-    item: "laptop",
+    item: "Laptop",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
     size: "Men",
     category: "Tech Devices",
-    item: "headphones",
+    item: "Headphones",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
@@ -177,23 +189,23 @@ const familyItems: PackingItem[] = [
     category: "Documents",
     item: "Passport",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
     size: "Men",
     category: "Documents",
-    item: "tickets",
+    item: "Tickets",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
     size: "Men",
     category: "Documents",
-    item: "wallet",
+    item: "Wallet",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
@@ -201,7 +213,7 @@ const familyItems: PackingItem[] = [
     category: "Documents",
     item: "ID",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
@@ -209,37 +221,37 @@ const familyItems: PackingItem[] = [
     category: "Miscellaneous",
     item: "Sunglasses",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
     size: "Men",
     category: "Miscellaneous",
-    item: "books",
+    item: "Books",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
     size: "Men",
     category: "Miscellaneous",
-    item: "medications",
+    item: "Medications",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
     size: "Women",
     category: "Clothing",
-    item: "tops",
+    item: "Tops",
     dayqty: 1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "n",
   },
   {
     size: "Women",
     category: "Clothing",
-    item: "pants",
+    item: "Pants",
     dayqty: 1.0,
     weight: 400.0,
     handcarry: "n",
@@ -247,7 +259,7 @@ const familyItems: PackingItem[] = [
   {
     size: "Women",
     category: "Clothing",
-    item: "dresses",
+    item: "Dresses",
     dayqty: 1.0,
     weight: 400.0,
     handcarry: "n",
@@ -255,7 +267,7 @@ const familyItems: PackingItem[] = [
   {
     size: "Women",
     category: "Clothing",
-    item: "underwear",
+    item: "Underwear",
     dayqty: 1.0,
     weight: 50.0,
     handcarry: "n",
@@ -263,7 +275,7 @@ const familyItems: PackingItem[] = [
   {
     size: "Women",
     category: "Clothing",
-    item: "socks",
+    item: "Socks",
     dayqty: 1.0,
     weight: 30.0,
     handcarry: "n",
@@ -271,7 +283,7 @@ const familyItems: PackingItem[] = [
   {
     size: "Women",
     category: "Clothing",
-    item: "jacket",
+    item: "Jacket",
     dayqty: -1.0,
     weight: 700.0,
     handcarry: "n",
@@ -279,7 +291,7 @@ const familyItems: PackingItem[] = [
   {
     size: "Women",
     category: "Clothing",
-    item: "swimwear",
+    item: "Swimwear",
     dayqty: -1.0,
     weight: 100.0,
     handcarry: "n",
@@ -287,7 +299,7 @@ const familyItems: PackingItem[] = [
   {
     size: "Women",
     category: "Clothing",
-    item: "hat",
+    item: "Hat",
     dayqty: -1.0,
     weight: 50.0,
     handcarry: "n",
@@ -319,7 +331,7 @@ const familyItems: PackingItem[] = [
   {
     size: "Women",
     category: "Toiletries",
-    item: "toothpaste",
+    item: "Toothpaste",
     dayqty: -1.0,
     weight: 100.0,
     handcarry: "n",
@@ -327,7 +339,7 @@ const familyItems: PackingItem[] = [
   {
     size: "Women",
     category: "Toiletries",
-    item: "deodorant",
+    item: "Deodorant",
     dayqty: -1.0,
     weight: 75.0,
     handcarry: "n",
@@ -335,17 +347,17 @@ const familyItems: PackingItem[] = [
   {
     size: "Women",
     category: "Toiletries",
-    item: "comb",
+    item: "Comb",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
     size: "Women",
     category: "Toiletries",
-    item: "makeup essentials",
+    item: "Makeup Essentials",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
@@ -353,31 +365,31 @@ const familyItems: PackingItem[] = [
     category: "Tech Devices",
     item: "Phone",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
     size: "Women",
     category: "Tech Devices",
-    item: "charger",
+    item: "Charger",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
     size: "Women",
     category: "Tech Devices",
-    item: "camera",
+    item: "Camera",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
     size: "Women",
     category: "Tech Devices",
-    item: "headphones",
+    item: "Headphones",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
@@ -385,23 +397,23 @@ const familyItems: PackingItem[] = [
     category: "Documents",
     item: "Passport",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
     size: "Women",
     category: "Documents",
-    item: "tickets",
+    item: "Tickets",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
     size: "Women",
     category: "Documents",
-    item: "wallet",
+    item: "Wallet",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
@@ -409,7 +421,7 @@ const familyItems: PackingItem[] = [
     category: "Documents",
     item: "ID",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
@@ -417,13 +429,13 @@ const familyItems: PackingItem[] = [
     category: "Miscellaneous",
     item: "Sunglasses",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
     size: "Women",
     category: "Miscellaneous",
-    item: "books",
+    item: "Books",
     dayqty: -1.0,
     weight: 300.0,
     handcarry: "n",
@@ -431,21 +443,21 @@ const familyItems: PackingItem[] = [
   {
     size: "Women",
     category: "Miscellaneous",
-    item: "medications",
+    item: "Medications",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
     size: "Women",
     category: "Miscellaneous",
-    item: "jewelry",
+    item: "Jewelry",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
-    size: "Boy",
+    size: "Boys",
     category: "Clothing",
     item: "T-shirts",
     dayqty: 1.0,
@@ -453,55 +465,55 @@ const familyItems: PackingItem[] = [
     handcarry: "n",
   },
   {
-    size: "Boy",
+    size: "Boys",
     category: "Clothing",
-    item: "shorts",
+    item: "Shorts",
     dayqty: 0.5,
     weight: 250.0,
     handcarry: "n",
   },
   {
-    size: "Boy",
+    size: "Boys",
     category: "Clothing",
-    item: "underwear",
+    item: "Underwear",
     dayqty: 1.0,
     weight: 50.0,
     handcarry: "n",
   },
   {
-    size: "Boy",
+    size: "Boys",
     category: "Clothing",
-    item: "socks",
+    item: "Socks",
     dayqty: 1.0,
     weight: 30.0,
     handcarry: "n",
   },
   {
-    size: "Boy",
+    size: "Boys",
     category: "Clothing",
-    item: "jacket",
+    item: "Jacket",
     dayqty: -1.0,
     weight: 700.0,
     handcarry: "n",
   },
   {
-    size: "Boy",
+    size: "Boys",
     category: "Clothing",
-    item: "swimwear",
+    item: "Swimwear",
     dayqty: -1.0,
     weight: 100.0,
     handcarry: "n",
   },
   {
-    size: "Boy",
+    size: "Boys",
     category: "Clothing",
-    item: "hat",
+    item: "Hat",
     dayqty: -1.0,
     weight: 50.0,
     handcarry: "n",
   },
   {
-    size: "Boy",
+    size: "Boys",
     category: "Shoes",
     item: "Sport Shoes",
     dayqty: -1.0,
@@ -509,7 +521,7 @@ const familyItems: PackingItem[] = [
     handcarry: "n",
   },
   {
-    size: "Boy",
+    size: "Boys",
     category: "Shoes",
     item: "Sandals",
     dayqty: -1.0,
@@ -517,7 +529,7 @@ const familyItems: PackingItem[] = [
     handcarry: "n",
   },
   {
-    size: "Boy",
+    size: "Boys",
     category: "Toiletries",
     item: "Toothbrush",
     dayqty: -1.0,
@@ -525,79 +537,79 @@ const familyItems: PackingItem[] = [
     handcarry: "n",
   },
   {
-    size: "Boy",
+    size: "Boys",
     category: "Toiletries",
-    item: "toothpaste",
+    item: "Toothpaste",
     dayqty: -1.0,
     weight: 100.0,
     handcarry: "n",
   },
   {
-    size: "Boy",
+    size: "Boys",
     category: "Toiletries",
-    item: "comb",
+    item: "Comb",
     dayqty: -1.0,
     weight: 75.0,
     handcarry: "n",
   },
   {
-    size: "Boy",
+    size: "Boys",
     category: "Toiletries",
-    item: "baby wipes",
+    item: "Wipes",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "n",
   },
   {
-    size: "Boy",
+    size: "Boys",
     category: "Tech Devices",
     item: "Tablet",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
-    size: "Boy",
+    size: "Boys",
     category: "Tech Devices",
-    item: "headphones",
+    item: "Headphones",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
-    size: "Boy",
+    size: "Boys",
     category: "Tech Devices",
-    item: "charger",
+    item: "Charger",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
-    size: "Boy",
+    size: "Boys",
     category: "Documents",
     item: "Passport",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
-    size: "Boy",
+    size: "Boys",
     category: "Documents",
-    item: "tickets",
+    item: "Tickets",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
-    size: "Boy",
+    size: "Boys",
     category: "Documents",
-    item: "school ID",
+    item: "Student ID",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
-    size: "Boy",
+    size: "Boys",
     category: "Miscellaneous",
     item: "Sunglasses",
     dayqty: -1.0,
@@ -605,31 +617,31 @@ const familyItems: PackingItem[] = [
     handcarry: "n",
   },
   {
-    size: "Boy",
+    size: "Boys",
     category: "Miscellaneous",
-    item: "book",
+    item: "Book",
     dayqty: -1.0,
     weight: 300.0,
     handcarry: "n",
   },
   {
-    size: "Boy",
+    size: "Boys",
     category: "Miscellaneous",
-    item: "toys",
+    item: "Toys",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
-    size: "Boy",
+    size: "Boys",
     category: "Miscellaneous",
-    item: "snacks",
+    item: "Snacks",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
-    size: "Girl",
+    size: "Girls",
     category: "Clothing",
     item: "T-shirts",
     dayqty: 1.0,
@@ -637,55 +649,55 @@ const familyItems: PackingItem[] = [
     handcarry: "n",
   },
   {
-    size: "Girl",
+    size: "Girls",
     category: "Clothing",
-    item: "dresses",
+    item: "Dresses",
     dayqty: 1.0,
     weight: 400.0,
     handcarry: "n",
   },
   {
-    size: "Girl",
+    size: "Girls",
     category: "Clothing",
-    item: "underwear",
+    item: "Underwear",
     dayqty: 1.0,
     weight: 50.0,
     handcarry: "n",
   },
   {
-    size: "Girl",
+    size: "Girls",
     category: "Clothing",
-    item: "socks",
+    item: "Socks",
     dayqty: 1.0,
     weight: 30.0,
     handcarry: "n",
   },
   {
-    size: "Girl",
+    size: "Girls",
     category: "Clothing",
-    item: "jacket",
+    item: "Jacket",
     dayqty: -1.0,
     weight: 700.0,
     handcarry: "n",
   },
   {
-    size: "Girl",
+    size: "Girls",
     category: "Clothing",
-    item: "swimwear",
+    item: "Swimwear",
     dayqty: -1.0,
     weight: 100.0,
     handcarry: "n",
   },
   {
-    size: "Girl",
+    size: "Girls",
     category: "Clothing",
-    item: "hat",
+    item: "Hat",
     dayqty: -1.0,
     weight: 50.0,
     handcarry: "n",
   },
   {
-    size: "Girl",
+    size: "Girls",
     category: "Shoes",
     item: "Sport Shoes",
     dayqty: -1.0,
@@ -693,7 +705,7 @@ const familyItems: PackingItem[] = [
     handcarry: "n",
   },
   {
-    size: "Girl",
+    size: "Girls",
     category: "Shoes",
     item: "Sandals",
     dayqty: -1.0,
@@ -701,7 +713,7 @@ const familyItems: PackingItem[] = [
     handcarry: "n",
   },
   {
-    size: "Girl",
+    size: "Girls",
     category: "Toiletries",
     item: "Toothbrush",
     dayqty: -1.0,
@@ -709,79 +721,79 @@ const familyItems: PackingItem[] = [
     handcarry: "n",
   },
   {
-    size: "Girl",
+    size: "Girls",
     category: "Toiletries",
-    item: "toothpaste",
+    item: "Toothpaste",
     dayqty: -1.0,
     weight: 100.0,
     handcarry: "n",
   },
   {
-    size: "Girl",
+    size: "Girls",
     category: "Toiletries",
-    item: "comb",
+    item: "Comb",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
-    size: "Girl",
+    size: "Girls",
     category: "Toiletries",
-    item: "hair ties",
+    item: "Hair Ties",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
-    size: "Girl",
+    size: "Girls",
     category: "Tech Devices",
     item: "Tablet",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
-    size: "Girl",
+    size: "Girls",
     category: "Tech Devices",
-    item: "headphones",
+    item: "Headphones",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
-    size: "Girl",
+    size: "Girls",
     category: "Tech Devices",
-    item: "charger",
+    item: "Charger",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
-    size: "Girl",
+    size: "Girls",
     category: "Documents",
     item: "Passport",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
-    size: "Girl",
+    size: "Girls",
     category: "Documents",
-    item: "tickets",
+    item: "Tickets",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
-    size: "Girl",
+    size: "Girls",
     category: "Documents",
-    item: "school ID",
+    item: "Student ID",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
-    size: "Girl",
+    size: "Girls",
     category: "Miscellaneous",
     item: "Sunglasses",
     dayqty: -1.0,
@@ -789,79 +801,79 @@ const familyItems: PackingItem[] = [
     handcarry: "n",
   },
   {
-    size: "Girl",
+    size: "Girls",
     category: "Miscellaneous",
-    item: "book",
+    item: "Book",
     dayqty: -1.0,
     weight: 300.0,
     handcarry: "n",
   },
   {
-    size: "Girl",
+    size: "Girls",
     category: "Miscellaneous",
-    item: "toys",
+    item: "Toys",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
-    size: "Girl",
+    size: "Girls",
     category: "Miscellaneous",
-    item: "snacks",
+    item: "Snacks",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
-    size: "Baby",
+    size: "Babies",
     category: "Clothing",
-    item: "onesies",
+    item: "Onesies",
     dayqty: 1.0,
     weight: 150.0,
     handcarry: "n",
   },
   {
-    size: "Baby",
+    size: "Babies",
     category: "Clothing",
-    item: "pajamas",
+    item: "Pajamas",
     dayqty: -1.0,
     weight: 300.0,
     handcarry: "n",
   },
   {
-    size: "Baby",
+    size: "Babies",
     category: "Clothing",
-    item: "pairs of socks",
+    item: "Socks",
     dayqty: 1.0,
     weight: 30.0,
     handcarry: "n",
   },
   {
-    size: "Baby",
+    size: "Babies",
     category: "Clothing",
-    item: "jacket",
+    item: "Jacket",
     dayqty: -1.0,
     weight: 700.0,
     handcarry: "n",
   },
   {
-    size: "Baby",
+    size: "Babies",
     category: "Clothing",
-    item: "hats",
+    item: "Hat",
     dayqty: -1.0,
     weight: 30.0,
     handcarry: "n",
   },
   {
-    size: "Baby",
+    size: "Babies",
     category: "Shoes",
-    item: "Soft shoes",
+    item: "Soft Shoes",
     dayqty: -1.0,
     weight: 400.0,
     handcarry: "n",
   },
   {
-    size: "Baby",
+    size: "Babies",
     category: "Shoes",
     item: "Sandals",
     dayqty: -1.0,
@@ -869,171 +881,171 @@ const familyItems: PackingItem[] = [
     handcarry: "n",
   },
   {
-    size: "Baby",
+    size: "Babies",
     category: "Toiletries",
-    item: "Baby shampoo",
+    item: "Baby Shampoo",
     dayqty: -1.0,
     weight: 100.0,
     handcarry: "n",
   },
   {
-    size: "Baby",
+    size: "Babies",
     category: "Toiletries",
-    item: "lotion",
+    item: "Lotion",
     dayqty: -1.0,
     weight: 100.0,
     handcarry: "n",
   },
   {
-    size: "Baby",
+    size: "Babies",
     category: "Toiletries",
-    item: "wipes",
+    item: "Wipes",
     dayqty: -1.0,
     weight: 100.0,
     handcarry: "y",
   },
   {
-    size: "Baby",
+    size: "Babies",
     category: "Baby Essentials",
-    item: "diapers",
+    item: "Diapers",
     dayqty: 2.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
-    size: "Baby",
+    size: "Babies",
     category: "Baby Essentials",
-    item: "baby powder",
+    item: "Baby powder",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
-    size: "Baby",
+    size: "Babies",
     category: "Baby Essentials",
-    item: "baby lotion",
+    item: "Baby lotion",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
-    size: "Baby",
+    size: "Babies",
     category: "Baby Essentials",
-    item: "baby formula",
+    item: "Baby formula",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
-    size: "Baby",
+    size: "Babies",
     category: "Baby Essentials",
-    item: "bottles",
+    item: "Bottles",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
-    size: "Baby",
+    size: "Babies",
     category: "Baby Essentials",
-    item: "pacifiers",
+    item: "Pacifiers",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
-    size: "Baby",
+    size: "Babies",
     category: "Baby Essentials",
-    item: "bibs",
+    item: "Bibs",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
-    size: "Baby",
+    size: "Babies",
     category: "Baby Essentials",
-    item: "toys",
+    item: "Toys",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
-    size: "Baby",
+    size: "Babies",
     category: "Baby Essentials",
-    item: "baby carrier",
+    item: "Baby carrier",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
-    size: "Baby",
+    size: "Babies",
     category: "Baby Essentials",
-    item: "baby food",
+    item: "Baby food",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
-    size: "Baby",
+    size: "Babies",
     category: "Baby Essentials",
     item: "Baby monitor",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
-    size: "Baby",
+    size: "Babies",
     category: "Tech Devices",
-    item: "charger",
+    item: "Charger",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
-    size: "Baby",
+    size: "Babies",
     category: "Tech Devices",
     item: "Tablet",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
-    size: "Baby",
+    size: "Babies",
     category: "Documents",
     item: "Passport",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
-    size: "Baby",
+    size: "Babies",
     category: "Documents",
-    item: "birth certificate",
+    item: "Birth Certificate",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
-    size: "Baby",
+    size: "Babies",
     category: "Miscellaneous",
-    item: "Baby blankets",
+    item: "Baby Blankets",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
-    size: "Baby",
+    size: "Babies",
     category: "Miscellaneous",
     item: "toys",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
   {
-    size: "Baby",
+    size: "Babies",
     category: "Miscellaneous",
-    item: "stroller",
+    item: "Stroller",
     dayqty: -1.0,
-    weight: NaN,
+    weight: 0,
     handcarry: "y",
   },
 ];
@@ -1046,42 +1058,41 @@ const FamilyPacking: React.FC = () => {
     girls: 0,
     babies: 0,
   });
-  const [days, setDays] = useState<number>(0);
-  const [packingList, setPackingList] = useState<PackingItem[]>([]);
+  const [days, setDays] = useState<number>(1);
+  const [packingList, setPackingList] = useState<PackingListItem[]>([]);
   const [totalWeight, setTotalWeight] = useState<number>(0);
   const [numBaggage, setNumBaggage] = useState<number>(0);
+  const [numFamily, setNumFamily] = useState<number>(0);
 
-  const calculatePackingList = () => {
-    const consolidatedList: { [key: string]: PackingItem } = {};
+  const createPackingList = () => {
+    const packlist: PackingListItem[] = [];
     let weight = 0;
 
-    familyItems.forEach((item) => {
-      const quantity = calculateTotalQuantity(item, familyCounts, days);
+    PackingData.forEach((data: PackingItem) => {
+      const quantity = calculateTotalQuantity(data, familyCounts, days);
 
       if (quantity > 0) {
-        const key = `${item.size}-${item.item}`;
-        if (!consolidatedList[key]) {
-          consolidatedList[key] = {
-            ...item,
-            dayqty: quantity,
-          };
-        } else {
-          consolidatedList[key].dayqty += quantity;
-        }
+        data.size;
+        packlist.push({
+          size: data.size,
+          item: data.item,
+          quantity: quantity,
+          handcarry: data.handcarry,
+        } as PackingListItem);
 
-        if (item.handcarry !== "y") {
-          weight += item.weight * quantity;
+        if (data.handcarry !== "y") {
+          weight += data.weight * quantity;
         }
       }
     });
 
-    setPackingList(Object.values(consolidatedList));
     setTotalWeight(weight / 1000); // convert grams to kg
     setNumBaggage(Math.ceil(weight / (23 * 1000))); // 23kg limit per baggage
+    setPackingList(packlist);
   };
 
   const calculateTotalQuantity = (
-    item: PackingItem,
+    data: PackingItem,
     familyCounts: FamilyCounts,
     days: number
   ) => {
@@ -1092,101 +1103,190 @@ const FamilyPacking: React.FC = () => {
       girls: familyCounts.girls,
       babies: familyCounts.babies,
     };
-    const perDayQuantity = item.dayqty === -1 ? 1 : item.dayqty;
+
+    const perDayQuantity = data.dayqty;
+    if (data.dayqty === -1) {
+      return sizeMap[data.size.toLowerCase() as keyof FamilyCounts] * 1;
+    }
 
     return (
-      sizeMap[item.size.toLowerCase() as keyof FamilyCounts] *
+      sizeMap[data.size.toLowerCase() as keyof FamilyCounts] *
       perDayQuantity *
       days
     );
   };
 
-  return (
-    <div className="p-4 max-w-4xl mx-auto">
-      <h1 className="text-2xl font-bold text-center mb-6">
-        Family Packing List
-      </h1>
-      <div className="flex flex-col md:flex-row gap-6">
-        <div className="flex-1">
-          <h2 className="text-xl font-semibold mb-2">Enter Family Details</h2>
-          <form className="space-y-4">
-            {["men", "women", "boys", "girls", "babies"].map((type) => (
-              <div key={type} className="flex items-center space-x-2">
-                <label htmlFor={type} className="capitalize">
-                  {type}:
-                </label>
-                <input
-                  id={type}
-                  type="number"
-                  min="0"
-                  className="input input-bordered w-full"
-                  value={familyCounts[type as keyof FamilyCounts]}
-                  onChange={(e) =>
-                    setFamilyCounts({
-                      ...familyCounts,
-                      [type]: Number(e.target.value),
-                    })
-                  }
-                />
-              </div>
-            ))}
-            <div className="flex items-center space-x-2">
-              <label htmlFor="days">Travel Days:</label>
-              <input
-                id="days"
-                type="number"
-                min="0"
-                className="input input-bordered w-full"
-                value={days}
-                onChange={(e) => setDays(Number(e.target.value))}
-              />
-            </div>
-            <button
-              type="button"
-              className="btn btn-primary w-full"
-              onClick={calculatePackingList}
-            >
-              Calculate Packing List and Total Weight
-            </button>
-          </form>
-        </div>
+  // Helper function for printing the bill
+  const handlePrint = () => {
+    window.print();
+  };
 
-        <div className="flex-1">
-          <h2 className="text-xl font-semibold mb-2">Packing List</h2>
-          <table className="table w-full mb-4">
+  return (
+    <div className="p-4 rounded-lg shadow-lg max-w-3xl mx-auto bg-slate-50 text-base items-center justify-center">
+      <div className="flex justify-center items-center bg-pink-200/85">
+        <Image src={fpHeaderPic} alt="Family Travel Packing" />
+      </div>
+      <p className="text-justify text-base mb-6 mt-2">
+        Ensure you never miss an essential item again by generating
+        comprehensive packing lists tailored to your family's size and travel
+        duration. Customize packing lists for each family member, from men and
+        women to kids and babies. Automatically calculate the estimated total
+        weight of packed items, and determine the number of baggage pieces
+        needed for your trip.
+      </p>
+      <div>
+        <h2 className="text-xl font-semibold mb-2">Travel Days:</h2>
+        <select
+          id="days"
+          className="select select-bordered text-base w-2/6 md:w-1/4"
+          value={days}
+          onChange={(e) => setDays(Number(e.target.value))}
+        >
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map((number) => (
+            <option key={number} value={number}>
+              {number}
+            </option>
+          ))}
+        </select>
+        <h2 className="text-xl font-semibold mb-2 mt-2">Travel members:</h2>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        {["Men", "Women", "Boys", "Girls", "Babies"].map((label, index) => (
+          <div key={index}>
+            <label className="label">{label}:</label>
+            <select
+              value={
+                index === 0
+                  ? familyCounts.men
+                  : index === 1
+                  ? familyCounts.women
+                  : index === 2
+                  ? familyCounts.boys
+                  : index === 3
+                  ? familyCounts.girls
+                  : familyCounts.babies
+              }
+              onChange={(e) => {
+                const value = Number(e.target.value);
+                if (index === 0) {
+                  setFamilyCounts({
+                    ...familyCounts,
+                    ["men"]: Number(e.target.value),
+                  });
+                  setNumFamily(numFamily + Number(e.target.value));
+                } else if (index === 1) {
+                  setFamilyCounts({
+                    ...familyCounts,
+                    ["women"]: Number(e.target.value),
+                  });
+                  setNumFamily(numFamily + Number(e.target.value));
+                } else if (index === 2)
+                  setFamilyCounts({
+                    ...familyCounts,
+                    ["boys"]: Number(e.target.value),
+                  });
+                else if (index === 3)
+                  setFamilyCounts({
+                    ...familyCounts,
+                    ["girls"]: Number(e.target.value),
+                  });
+                else
+                  setFamilyCounts({
+                    ...familyCounts,
+                    ["babies"]: Number(e.target.value),
+                  });
+              }}
+              className="select select-bordered w-full"
+            >
+              {[0, 1, 2, 3, 4, 5].map((i) => (
+                <option key={i} value={i}>
+                  {i}
+                </option>
+              ))}
+            </select>
+          </div>
+        ))}
+      </div>
+      <div className="flex items-center justify-center">
+        <button
+          type="button"
+          className="btn btn-primary text-white text-base"
+          onClick={createPackingList}
+          disabled={numFamily < 1}
+        >
+          Create Packing List
+        </button>
+      </div>
+      {packingList.length > 0 && (
+        <>
+          <h2 className="text-xl font-bold mb-2 mt-2">
+            Estimated Weight & Baggage
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div className="stats shadow">
+              <div className="stat">
+                <div className="stat-figure text-secondary">
+                  <div className="avatar">
+                    <div className="w-16">
+                      <Image src={weightPic} alt="Weight in Kilograms" />
+                    </div>
+                  </div>
+                </div>
+                <div className="stat-title text-primary font-bold">
+                  Total Weight
+                </div>
+                <div className="stat-value text-secondary">{totalWeight}</div>
+                <div className="stat-desc text-base">kilograms</div>
+              </div>
+            </div>
+            <div className="stats shadow">
+              <div className="stat">
+                <div className="stat-figure text-secondary">
+                  <div className="avatar">
+                    <div className="w-16">
+                      <Image src={luggagePic} alt="Luggages" />
+                    </div>
+                  </div>
+                </div>
+                <div className="stat-title text-primary font-bold">
+                  Baggages
+                </div>
+                <div className="stat-value text-secondary">{numBaggage}</div>
+                <div className="stat-desc text-base">Bags</div>
+              </div>
+            </div>
+          </div>
+          <h2 className="text-xl font-bold mb-2 mt-2">Packing List</h2>
+        </>
+      )}
+      {packingList.length > 0 && (
+        <>
+          <table className="table w-full mt-4">
             <thead>
               <tr>
-                <th>Size</th>
+                <th>Member</th>
                 <th>Item</th>
-                <th>Total Quantity</th>
+                <th>Quantity</th>
               </tr>
             </thead>
             <tbody>
-              {packingList.map((item, idx) => (
-                <tr key={idx}>
+              {packingList.map((item, index) => (
+                <tr key={index}>
                   <td>{item.size}</td>
                   <td>{item.item}</td>
-                  <td>{item.dayqty}</td>
+                  <td>{Math.ceil(item.quantity)}</td>
                 </tr>
               ))}
             </tbody>
           </table>
-
-          <h2 className="text-xl font-semibold mb-2">Metrics</h2>
-          <table className="table w-full">
-            <tbody>
-              <tr>
-                <td>Total Weight (Kg)</td>
-                <td>{totalWeight.toFixed(2)} kg</td>
-              </tr>
-              <tr>
-                <td>Estimated Number of Baggage</td>
-                <td>{numBaggage}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+          <button
+            className="btn btn-secondary mt-4 flex mx-auto text-white text-base"
+            onClick={handlePrint}
+          >
+            <FaPrint className="mr-2" /> Share Packing List
+          </button>
+        </>
+      )}
     </div>
   );
 };

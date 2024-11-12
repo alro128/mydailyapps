@@ -14,6 +14,15 @@ const products = [
   },
   {
     id: 2,
+    name: "Family Travel Packing",
+    description:
+      "Ensure you never miss an essential item again by generating comprehensive packing lists tailored to your family's size and travel duration. Customize packing lists for each family member, from men and women to kids and babies. Automatically calculate the estimated total weight of packed items, and determine the number of baggage pieces needed for your trip.",
+    topic: "social",
+    path: "/familypacking",
+    thumbnail: "/familypacking-thumbnail.webp",
+  },
+  {
+    id: 3,
     name: "Metronome with Chord Progression",
     description:
       "Showing the chord progression within the metronome helps music learners follow the beats while guiding which chords to play, making it ideal for improvisation and practice.",
@@ -22,7 +31,7 @@ const products = [
     thumbnail: "/metronome-thumbnail.webp",
   },
   {
-    id: 3,
+    id: 4,
     name: "Plant Profiler",
     description:
       "Optimize your gardening practices and ensure your plants thrive in the right conditions by getting customized care recommendations for various plant types.",
@@ -31,7 +40,7 @@ const products = [
     thumbnail: "/plantprofiler-thumbnail.webp",
   },
   {
-    id: 4,
+    id: 5,
     name: "Plant Pot Volume Calculator",
     description:
       "Easily calculate the ideal pot volume for your plants based on pot shape and dimensions to ensure optimal growth and health.",
@@ -40,7 +49,7 @@ const products = [
     thumbnail: "/plantpotvolume-thumbnail.webp",
   },
   {
-    id: 5,
+    id: 6,
     name: "Word Counter",
     description:
       "Quickly count words and characters, and get estimated reading and speaking times for any text.",
@@ -49,7 +58,7 @@ const products = [
     thumbnail: "/wordcounter-thumbnail.webp",
   },
   {
-    id: 6,
+    id: 7,
     name: "Free Templates",
     description:
       "Explore our collection of free, downloadable MS Excel templates designed for various needs, including budgeting, planning, and organizing. Our templates are user-friendly and fully compatible with Excel, helping you manage personal and professional tasks efficiently. Best of all, your privacy is guaranteed, as no personal data is collected or stored.",
@@ -57,7 +66,6 @@ const products = [
     path: "/freetemplates",
     thumbnail: "/freetemplates-thumbnail.webp",
   },
-  // Add more products as needed
 ];
 
 export default function Home() {
