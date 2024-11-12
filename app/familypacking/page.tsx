@@ -1128,10 +1128,10 @@ const FamilyPacking: React.FC = () => {
       </div>
       <p className="text-justify text-base mb-6 mt-2">
         Ensure you never miss an essential item again by generating
-        comprehensive packing lists tailored to your family's size and travel
-        duration. Customize packing lists for each family member, from men and
-        women to kids and babies. Automatically calculate the estimated total
-        weight of packed items, and determine the number of baggage pieces
+        comprehensive packing lists tailored to your family&apos;s size and
+        travel duration. Customize packing lists for each family member, from
+        men and women to kids and babies. Automatically calculate the estimated
+        total weight of packed items, and determine the number of baggage pieces
         needed for your trip.
       </p>
       <div>
@@ -1167,7 +1167,6 @@ const FamilyPacking: React.FC = () => {
                   : familyCounts.babies
               }
               onChange={(e) => {
-                const value = Number(e.target.value);
                 if (index === 0) {
                   setFamilyCounts({
                     ...familyCounts,
